@@ -126,22 +126,22 @@ export default function Navbar() {
               <button
                 onClick={() => {
                   setIsOpen(false)
-                  void signInWithGoogle()
-                }}
-                disetShowLoginModal(true)
+                  setShowLoginModal(true)
                 }}
                 disabled={loading}
                 className="mt-2 w-full rounded-md bg-heritage-dark-brown px-4 py-2 text-left font-sans text-sm font-semibold text-heritage-light-beige hover:bg-heritage-gold hover:text-heritage-dark-brown disabled:opacity-70"
               >
                 Sign in
-          </div>
-        )}
-      </div>
-    </nav>
+              </button>
+            )}
+          </nav>
+        </div>
 
         <LoginModal
           isOpen={showLoginModal}
           onClose={() => setShowLoginModal(false)}
         />
+      </div>
+    </nav>
   )
 }
