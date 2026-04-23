@@ -6,13 +6,6 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  /* Disable text selection */
-  user-select: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  /* Disable drag to select */
-  -webkit-touch-callout: none;
 }
 
 html {
@@ -80,4 +73,14 @@ p {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #6b4423;
+}
+
+/* Restrict selection/copy only for blog story paragraphs */
+.blog-content-protected,
+.blog-content-protected * {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-touch-callout: none;
 }

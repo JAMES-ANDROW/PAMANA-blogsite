@@ -109,7 +109,7 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
 
         {/* Main Story */}
-        <div className="prose prose-custom max-w-none mb-12">
+        <div className="prose prose-custom max-w-none mb-12 blog-content-protected">
           {post.story.split('\n\n').map((paragraph, index) => (
             <p
               key={index}
