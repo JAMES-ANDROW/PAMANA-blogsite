@@ -13,6 +13,7 @@ type CommentSectionProps = {
 
 type ProfileRow = {
   id: string
+  email: string | null
   full_name: string | null
   avatar_url: string | null
 }
@@ -53,6 +54,11 @@ export default function CommentSection({ postId }: CommentSectionProps) {
         (user?.id === row.user_id ? currentUserEmail : null) ||
         FALLBACK_AUTHOR
 
+      const email =
+        profile?.email ||
+        (user?.id === row.user_id ? currentUserEmail : null) ||
+        null
+
       const avatarUrl =
         profile?.avatar_url ||
         (user?.id === row.user_id ? user.user_metadata?.avatar_url : null) ||
@@ -62,6 +68,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
         ...row,
         author: {
           name,
+          email,
           avatarUrl,
         },
       }
@@ -91,7 +98,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
     if (userIds.length > 0) {
       const { data: profilesData } = await supabase
         .from('profiles')
-        .select('id, full_name, avatar_url')
+        .select('id, email, full_name, avatar_url')
         .in('id', userIds)
 
       if (profilesData) {
@@ -144,6 +151,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
       created_at: new Date().toISOString(),
       author: {
         name: user.email || FALLBACK_AUTHOR,
+        email: user.email || null,
         avatarUrl: user.user_metadata?.avatar_url || null,
       },
     }

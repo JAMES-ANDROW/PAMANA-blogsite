@@ -4,10 +4,14 @@
 -- Profiles table for avatar/name rendering in comments.
 create table if not exists public.profiles (
   id uuid primary key references auth.users(id) on delete cascade,
+  email text,
   full_name text,
   avatar_url text,
   updated_at timestamptz default now()
 );
+
+alter table public.profiles
+  add column if not exists email text;
 
 create table if not exists public.comments (
   id uuid primary key default gen_random_uuid(),
@@ -95,16 +99,28 @@ security definer
 set search_path = public
 as $$
 begin
-  insert into public.profiles (id, full_name, avatar_url)
+  insert into public.profiles (id, email, full_name, avatar_url)
   values (
     new.id,
+    new.email,
     coalesce(new.raw_user_meta_data ->> 'full_name', new.raw_user_meta_data ->> 'name'),
     new.raw_user_meta_data ->> 'avatar_url'
   )
-  on conflict (id) do nothing;
+  on conflict (id) do update
+  set email = excluded.email,
+      full_name = coalesce(excluded.full_name, public.profiles.full_name),
+      avatar_url = coalesce(excluded.avatar_url, public.profiles.avatar_url),
+      updated_at = now();
   return new;
 end;
 $$;
+
+update public.profiles p
+set email = u.email,
+    updated_at = now()
+from auth.users u
+where p.id = u.id
+  and (p.email is null or p.email <> u.email);
 
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created

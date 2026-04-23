@@ -2,6 +2,7 @@
 
 export type CommentAuthor = {
   name: string
+  email?: string | null
   avatarUrl?: string | null
 }
 
@@ -57,6 +58,11 @@ export default function CommentItem({ comment }: CommentItemProps) {
           <p className="font-sans text-sm font-semibold text-heritage-dark-brown">
             {comment.author.name}
           </p>
+          {comment.author.email && (
+            <p className="font-sans text-xs text-heritage-brown/80">
+              {comment.author.email}
+            </p>
+          )}
           <p className="font-sans text-xs text-heritage-brown/80">
             {formatCommentDate(comment.created_at)}
           </p>
