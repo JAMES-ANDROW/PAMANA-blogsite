@@ -3,12 +3,13 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { useUser } from '@/hooks/useUser'
-import LoginModal from './social/LoginModal'
+import LoginModal from './LoginModal'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [showLoginModal, setShowLoginModal] = useState(false)
   const { user, isAuthenticated, loading, signOut } = useUser()
+  const userEmail = user?.email ?? 'Signed in'
 
   return (
     <nav className="sticky top-0 z-50 bg-heritage-light-beige border-b border-heritage-gold shadow-sm">
@@ -46,14 +47,19 @@ export default function Navbar() {
             </Link>
 
             {isAuthenticated && user ? (
-              <button
-                onClick={() => {
-                  void signOut()
-                }}
-                className="rounded-md border border-heritage-gold/60 px-3 py-1.5 font-sans text-xs font-semibold text-heritage-dark-brown hover:bg-heritage-beige"
-              >
-                Sign out
-              </button>
+              <div className="flex items-center gap-3">
+                <span className="max-w-[220px] truncate rounded-full border border-heritage-gold/40 bg-white px-3 py-1.5 font-sans text-xs text-heritage-brown">
+                  {userEmail}
+                </span>
+                <button
+                  onClick={() => {
+                    void signOut()
+                  }}
+                  className="rounded-md border border-heritage-gold/60 px-3 py-1.5 font-sans text-xs font-semibold text-heritage-dark-brown hover:bg-heritage-beige"
+                >
+                  Sign out
+                </button>
+              </div>
             ) : (
               <button
                 onClick={() => setShowLoginModal(true)}
@@ -113,15 +119,20 @@ export default function Navbar() {
             </Link>
 
             {isAuthenticated && user ? (
-              <button
-                onClick={() => {
-                  setIsOpen(false)
-                  void signOut()
-                }}
-                className="mt-2 w-full rounded-md border border-heritage-gold/60 px-4 py-2 text-left font-sans text-sm font-semibold text-heritage-dark-brown hover:bg-heritage-beige"
-              >
-                Sign out
-              </button>
+              <>
+                <div className="rounded-md border border-heritage-gold/30 bg-white px-4 py-2 font-sans text-xs text-heritage-brown">
+                  {userEmail}
+                </div>
+                <button
+                  onClick={() => {
+                    setIsOpen(false)
+                    void signOut()
+                  }}
+                  className="mt-2 w-full rounded-md border border-heritage-gold/60 px-4 py-2 text-left font-sans text-sm font-semibold text-heritage-dark-brown hover:bg-heritage-beige"
+                >
+                  Sign out
+                </button>
+              </>
             ) : (
               <button
                 onClick={() => {

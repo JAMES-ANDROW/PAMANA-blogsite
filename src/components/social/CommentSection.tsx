@@ -5,7 +5,7 @@ import { useUser } from '@/hooks/useUser'
 import { supabase } from '@/lib/supabase/client'
 import CommentForm from './CommentForm'
 import CommentItem, { CommentRecord } from './CommentItem'
-import LoginModal from './LoginModal'
+import LoginModal from '../LoginModal'
 
 type CommentSectionProps = {
   postId: string
@@ -33,6 +33,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
   const [loadingComments, setLoadingComments] = useState(true)
   const [showLoginModal, setShowLoginModal] = useState(false)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  const currentUserEmail = user?.email ?? FALLBACK_AUTHOR
 
   const commentsCountLabel = useMemo(() => {
     if (comments.length === 1) {
@@ -49,7 +50,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
       const profile = profilesById.get(row.user_id)
       const name =
         profile?.full_name ||
-        (user?.id === row.user_id ? user.user_metadata?.full_name : null) ||
+        (user?.id === row.user_id ? currentUserEmail : null) ||
         FALLBACK_AUTHOR
 
       const avatarUrl =
@@ -142,7 +143,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
       content,
       created_at: new Date().toISOString(),
       author: {
-        name: user.user_metadata?.full_name || FALLBACK_AUTHOR,
+        name: user.email || FALLBACK_AUTHOR,
         avatarUrl: user.user_metadata?.avatar_url || null,
       },
     }
@@ -196,6 +197,12 @@ export default function CommentSection({ postId }: CommentSectionProps) {
         <h2 className="font-serif text-2xl text-heritage-dark-brown">Comments</h2>
         <p className="font-sans text-sm text-heritage-brown">{commentsCountLabel}</p>
       </div>
+
+      {isAuthenticated && user && (
+        <div className="mb-4 rounded-lg border border-heritage-gold/30 bg-white px-3 py-2 font-sans text-sm text-heritage-brown">
+          Commenting as <span className="font-semibold text-heritage-dark-brown">{currentUserEmail}</span>
+        </div>
+      )}
 
       {errorMessage && (
         <p className="mb-4 rounded-md border border-red-200 bg-red-50 px-3 py-2 font-sans text-sm text-red-700">

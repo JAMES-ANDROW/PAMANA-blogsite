@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useUser } from '@/hooks/useUser'
 import { supabase } from '@/lib/supabase/client'
-import LoginModal from './LoginModal'
+import LoginModal from '../LoginModal'
 
 type LikeButtonProps = {
   postId: string
