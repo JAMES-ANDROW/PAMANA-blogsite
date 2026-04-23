@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { AuthProvider } from '@/components/auth/AuthProvider'
+import { ContentProtection } from '@/components/ContentProtection'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -43,6 +44,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <ContentProtection />
         <AuthProvider>
           <Navbar />
           <main>{children}</main>
