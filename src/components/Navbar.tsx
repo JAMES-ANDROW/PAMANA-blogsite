@@ -134,8 +134,8 @@ export default function Navbar() {
                 Sign in
               </button>
             )}
-          </nav>
-        </div>
+          </div>
+        )}
 
         <LoginModal
           isOpen={showLoginModal}
