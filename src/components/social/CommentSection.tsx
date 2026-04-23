@@ -26,7 +26,7 @@ type CommentRow = {
   created_at: string
 }
 
-const FALLBACK_AUTHOR = 'Pamana Reader'
+const FALLBACK_AUTHOR = 'Unknown User'
 
 export default function CommentSection({ postId }: CommentSectionProps) {
   const { user, isAuthenticated, loading: authLoading } = useUser()
@@ -51,6 +51,7 @@ export default function CommentSection({ postId }: CommentSectionProps) {
       const profile = profilesById.get(row.user_id)
       const name =
         profile?.full_name ||
+        profile?.email ||
         (user?.id === row.user_id ? currentUserEmail : null) ||
         FALLBACK_AUTHOR
 
