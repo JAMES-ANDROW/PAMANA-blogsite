@@ -3,7 +3,7 @@
 import { useAuthContext } from '@/components/auth/AuthProvider'
 
 export function useUser() {
-  const { user, session, loading, signInWithEmail, signOut } = useAuthContext()
+  const { user, session, loading, signInWithEmail, signInWithMagicLink, signOut } = useAuthContext()
 
   return {
     user,
@@ -11,6 +11,7 @@ export function useUser() {
     loading,
     isAuthenticated: !!user,
     signInWithEmail,
+    signInWithMagicLink,
     signOut,
   }
 }

@@ -9,6 +9,7 @@ type AuthContextValue = {
   session: Session | null
   loading: boolean
   signInWithEmail: (email: string, password: string) => Promise<void>
+  signInWithMagicLink: (email: string) => Promise<void>
   signOut: () => Promise<void>
 }
 
@@ -56,19 +57,40 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       email,
       password,
     })
+
     if (error?.status === 400) {
-      // User doesn't exist, create account
-      await supabase.auth.signUp({
+      const { error: signUpError } = await supabase.auth.signUp({
         email,
         password,
       })
-    } else if (error) {
+      if (signUpError) {
+        throw signUpError
+      }
+      return
+    }
+
+    if (error) {
+      throw error
+    }
+  }
+
+  const signInWithMagicLink = async (email: string) => {
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        emailRedirectTo: typeof window !== 'undefined' ? window.location.origin : undefined,
+      },
+    })
+
+    if (error) {
       throw error
     }
   }
 
   const signOut = async () => {
     await supabase.auth.signOut()
+    setSession(null)
+    setUser(null)
   }
 
   const value = useMemo(
@@ -77,6 +99,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       session,
       loading,
       signInWithEmail,
+      signInWithMagicLink,
       signOut,
     }),
     [user, session, loading]

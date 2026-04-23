@@ -14,13 +14,14 @@ export default function LoginModal({
   isOpen,
   onClose,
   title = 'Sign in to continue',
-  message = 'Join the conversation and react to stories with your email.',
+  message = 'Use your email to sign in or get a magic link.',
 }: LoginModalProps) {
-  const { signInWithEmail } = useUser()
+  const { signInWithEmail, signInWithMagicLink } = useUser()
   const [loading, setLoading] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
+  const [success, setSuccess] = useState('')
 
   if (!isOpen) {
     return null
@@ -31,14 +32,39 @@ export default function LoginModal({
       setError('Please enter email and password')
       return
     }
+
     setLoading(true)
     setError('')
+    setSuccess('')
+
     try {
       await signInWithEmail(email, password)
       setEmail('')
       setPassword('')
+      setSuccess('Signed in successfully.')
+      onClose()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Sign in failed')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const handleMagicLink = async () => {
+    if (!email) {
+      setError('Please enter your email address')
+      return
+    }
+
+    setLoading(true)
+    setError('')
+    setSuccess('')
+
+    try {
+      await signInWithMagicLink(email)
+      setSuccess('Check your inbox for the magic link.')
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Magic link sign in failed')
     } finally {
       setLoading(false)
     }
@@ -78,14 +104,32 @@ export default function LoginModal({
             disabled={loading}
             className="w-full rounded-md border border-heritage-gold/30 bg-heritage-light-beige px-3 py-2 text-sm text-heritage-dark-brown placeholder-heritage-brown/60 focus:border-heritage-gold focus:outline-none"
           />
+
           {error && <p className="text-sm text-red-600">{error}</p>}
+          {success && <p className="text-sm text-green-700">{success}</p>}
+
           <button
             type="button"
             onClick={handleEmailSignIn}
             disabled={loading}
-            className="mt-3 w-full rounded-md bg-heritage-dark-brown px-4 py-3 font-sans text-sm font-semibold text-heritage-light-beige hover:bg-heritage-gold hover:text-heritage-dark-brown disabled:cursor-not-allowed disabled:opacity-70"
+            className="w-full rounded-md bg-heritage-dark-brown px-4 py-3 font-sans text-sm font-semibold text-heritage-light-beige hover:bg-heritage-gold hover:text-heritage-dark-brown disabled:cursor-not-allowed disabled:opacity-70"
           >
             {loading ? 'Signing in...' : 'Sign in with Email'}
+          </button>
+
+          <div className="relative flex items-center gap-3 py-2">
+            <div className="flex-1 border-t border-heritage-gold/30"></div>
+            <span className="text-xs text-heritage-brown">or</span>
+            <div className="flex-1 border-t border-heritage-gold/30"></div>
+          </div>
+
+          <button
+            type="button"
+            onClick={handleMagicLink}
+            disabled={loading}
+            className="w-full rounded-md border border-heritage-gold/60 bg-white px-4 py-3 font-sans text-sm font-semibold text-heritage-dark-brown hover:bg-heritage-light-beige disabled:cursor-not-allowed disabled:opacity-70"
+          >
+            {loading ? 'Sending link...' : 'Send magic link'}
           </button>
         </div>
       </div>
