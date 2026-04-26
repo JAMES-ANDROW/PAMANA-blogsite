@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       type: 'article',
       title: post.title,
       description: post.excerpt,
-      authors: ['Pamana'],
+      authors: [post.author],
       publishedTime: post.date,
       tags: post.tags,
     },
@@ -67,7 +67,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           <div className="mb-6">
             <Link 
               href="/blog" 
-              className="inline-flex items-center gap-2 px-4 py-2 bg-heritage-gold hover:bg-heritage-dark-gold text-white font-sans text-sm font-semibold rounded-lg transition-all duration-300 hover:shadow-md active:scale-95"
+              className="inline-flex items-center gap-2 px-4 py-2 bg-heritage-dark-brown hover:bg-heritage-gold text-heritage-light-beige hover:text-heritage-dark-brown font-sans text-sm font-semibold rounded-lg transition-all duration-300 hover:shadow-md active:scale-95"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -78,13 +78,18 @@ export default async function BlogPostPage({ params }: PageProps) {
           <h1 className="font-serif text-5xl font-bold text-heritage-dark-brown mb-4">
             {post.title}
           </h1>
-          <p className="text-heritage-gold font-sans text-sm">
-            {new Date(post.date).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-            })}
-          </p>
+          <div className="space-y-1">
+            <p className="text-heritage-gold font-sans text-sm">
+              {new Date(post.date).toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+              })}
+            </p>
+            <p className="font-sans text-sm text-heritage-brown">
+              By <span className="font-semibold text-heritage-dark-brown">{post.author}</span>
+            </p>
+          </div>
         </div>
       </section>
 
@@ -175,7 +180,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {prevPost && (
                 <Link href={`/blog/${prevPost.slug}`}>
-                  <div className="group h-full p-6 rounded-lg border-2 border-heritage-gold bg-white hover:bg-heritage-light-beige hover:border-heritage-dark-gold transition-all duration-300 hover:shadow-lg cursor-pointer">
+                  <div className="group h-full p-6 rounded-lg border-2 border-heritage-gold bg-white hover:bg-heritage-light-beige hover:border-heritage-brown transition-all duration-300 hover:shadow-lg cursor-pointer">
                     <p className="text-heritage-gold font-sans text-xs uppercase tracking-widest mb-3 font-semibold flex items-center gap-2">
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -193,7 +198,7 @@ export default async function BlogPostPage({ params }: PageProps) {
               )}
               {nextPost && (
                 <Link href={`/blog/${nextPost.slug}`}>
-                  <div className="group h-full p-6 rounded-lg border-2 border-heritage-gold bg-white hover:bg-heritage-light-beige hover:border-heritage-dark-gold transition-all duration-300 hover:shadow-lg cursor-pointer">
+                  <div className="group h-full p-6 rounded-lg border-2 border-heritage-gold bg-white hover:bg-heritage-light-beige hover:border-heritage-brown transition-all duration-300 hover:shadow-lg cursor-pointer">
                     <p className="text-heritage-gold font-sans text-xs uppercase tracking-widest mb-3 font-semibold flex items-center justify-end gap-2">
                       Next Story
                       <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
