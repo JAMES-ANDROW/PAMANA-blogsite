@@ -12,7 +12,7 @@ export interface BlogPost {
   date: string
   author: string
   likes: number
-  category: 'place' | 'tradition' | 'community' | 'livelihood'
+  category: 'place' | 'tradition' | 'community' | 'livelihood' | 'spiritual' | 'family' | 'personal'
   featured_image: string
   images: Image[]
   story: string
