@@ -93,16 +93,26 @@ export default async function BlogPostPage({ params }: PageProps) {
         </div>
       </section>
 
+
       {/* Featured Image */}
       <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="relative h-96 md:h-[500px] rounded-lg overflow-hidden bg-heritage-beige">
+        <div className="rounded-lg overflow-hidden bg-heritage-beige">
           <img
             src={post.featured_image}
             alt={post.title}
-            className="w-full h-full object-cover"
+            className="mx-auto block max-w-full h-auto"
           />
         </div>
       </section>
+
+      {/* Excerpt lead — moved below featured image */}
+      {post.excerpt && post.slug !== 'mirror-of-memory-pamana-resilience' && (
+        <section className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="font-serif italic text-heritage-gold text-center text-lg mb-6">
+            {post.excerpt}
+          </p>
+        </section>
+      )}
 
       {/* Story Content */}
       <article className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -125,30 +135,7 @@ export default async function BlogPostPage({ params }: PageProps) {
           ))}
         </div>
 
-        {/* Gallery */}
-        {post.images.length > 0 && (
-          <section className="mb-12">
-            <h2 className="font-serif text-3xl font-bold text-heritage-dark-brown mb-8">
-              Visual Narrative
-            </h2>
-            <div className="space-y-12">
-              {post.images.map((image, index) => (
-                <div key={index} className="space-y-4">
-                  <div className="relative h-96 md:h-[500px] rounded-lg overflow-hidden bg-heritage-beige">
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <p className="font-serif text-heritage-gold text-center italic">
-                    {image.caption}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </section>
-        )}
+        {/* Gallery removed per request */}
 
         {/* Tags */}
         <div className="space-y-4 border-t border-heritage-gold pt-8 mb-12">

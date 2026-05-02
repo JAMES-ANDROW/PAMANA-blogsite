@@ -145,3 +145,8 @@ p {
   }
 }
 
+/* Utility to force a regular font weight when broader styles override it */
+.force-regular {
+  font-weight: 400 !important;
+}
+
