@@ -253,7 +253,7 @@ With the use of my camera, I was able to grasp how the world works. My perspecti
     author: 'Miguel Adrian B. Bawi-in',
     likes: 0,
     category: 'tradition',
-    featured_image: '/images/BAWI-IN.jpg',
+    featured_image: '/images/BAWI-IN.JPG',
     images: [
       {
         src: '/images/BAWI-IN.jpg',
