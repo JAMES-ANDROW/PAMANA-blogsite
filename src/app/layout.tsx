@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description:
     'A storytelling platform showcasing cultural heritage, traditions, and meaningful places through original photography and narrative writing.',
   icons: {
-    icon: '/images/wordpress-logo.png',
+    icon: '/images/PamanaLogo.png',
   },
   keywords: [
     'travel',
