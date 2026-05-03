@@ -168,11 +168,17 @@ export default function LikeButton({ postId }: LikeButtonProps) {
     }
   }
 
+  const handleLikeClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault()
+    event.stopPropagation()
+    void toggleLike()
+  }
+
   return (
     <>
       <button
         type="button"
-        onClick={toggleLike}
+        onClick={handleLikeClick}
         disabled={isUpdating || authLoading}
         className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-sans text-sm font-semibold transition-all ${
           likedByUser
