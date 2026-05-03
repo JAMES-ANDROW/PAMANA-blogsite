@@ -180,35 +180,36 @@ Through the lens, my perspective shifted—and the weight of my heritage—it re
   },
   {
     id: '6',
-    slug: 'highland-harvest-day',
-    title: 'Highland Harvest Day',
+    slug: 'i-serve-you-a-plate-of-plates',
+    title: 'I serve you a plate of...plates?',
     excerpt:
-      'A harvest gathering in the highlands reveals how food, labor, and gratitude shape collective life.',
+      'A stack of inherited crystal plates uncovers family memory, changing time, and a quiet lesson passed down by a grandmother.',
     date: '2024-01-07',
-    author: 'Tomas Villanueva',
+    author: 'Jasper N. Naranjo (Autumn)',
     likes: 89,
     category: 'livelihood',
-    featured_image: '/images/placeholder-1.jpg',
+    featured_image: '/images/NARANJO.png',
     images: [
       {
-        src: '/images/placeholder-1.jpg',
-        alt: 'Terraced fields in highlands',
-        caption: 'Terraces carved by hand over generations of careful cultivation',
-      },
-      {
-        src: '/images/placeholder-3.jpg',
-        alt: 'Harvest baskets',
-        caption: 'Baskets filled and carried together, one row at a time',
+        src: '/images/NARANJO.png',
+        alt: 'Stack of crystal glass plates from family heritage',
+        caption: 'Crystal plates passed down through generations of the family',
       },
     ],
-    story: `Harvest day begins before sunrise. Families gather at the fields with tools, food, and woven baskets, greeting one another as if arriving for both work and celebration.
+    story: `The day felt so tiring and incredibly hot, and what’s even worse is me busting my whole body and mind to finish all my works in the University Student Electoral Committee (USEC), which resulted into me not being able to leave my room for a few days up til now and it also produced the fact that I couldn’t leave to actually go look for things that I could find for the project.
 
-Tasks are shared naturally: elders advise on timing, adults cut and gather, and children sort and stack. Between long stretches of labor, songs rise from one terrace to another, keeping spirits high and pace steady.
+Despite my frustrations, it ended with me asking my grandmother whether we have anything that could potentially be something of a heritage or something passed down from the family, my grandmother mentioned that she has just the thing, and quickly left to go to her sister’s (also my aunt) mansion. After a little while she came back holding a stack of crystal glass plates in a certain way, I immediately looked at her with pure confusion only for her to say that it belongs to the family.
 
-At midday everyone eats together under a temporary shelter. The meal is simple but meaningful, prepared from ingredients grown nearby and recipes handed down across decades.
+She mentions that these glass plates actually belonged to her grandmother back during the wars and that these plates are actually something that they have been using until 2001. She says that these plates have been in the family for generations and that made me wonder, how many foods did these plates hold? How many mouths has it fed? How many bellies were full because of it? And how many gatherings has it witnessed? These questions plagued my mind like a beautiful memetic virus, set out to wonder even more on what memory these plates hold.
 
-The day ends with tired hands and full baskets, but also with renewed connection. Watching this cycle unfold made clear that agriculture here is not only an economic activity. It is cultural practice, social glue, and a living expression of gratitude.`,
-    tags: ['harvest', 'highlands', 'food', 'agrarian-life'],
+The plates glimmered like mirrors whenever light hits their surface, its whole crystal structure is also designed in a unique way, showing off beautiful flower-like edges, yet somehow the color changed according to my grandmother. She tells me that the plates didn’t look like that from her childhood, back then, the plates were clear and translucent, yet now, time tainted it with a warm amber stain permanently, symbolizing the amount of time it has witnessed, though the memoria embedded in these plates are greater than the years it has gone through, I truly do wonder why they kept these plates away.
+
+My grandmother simply said that these plates have served their purpose, and that new ones must overtake their place. Those exact words made me feel a bit sad, ‘cause in my mind, it also meant that the old (elderly) must be put away (die) eventually, so that new one (young-ins) can take their place.
+
+I have to admit that despite the short life lesson I heard from her, I had one more question, I was asking her why she was holding the plates like she was about to serve a whole Rotisserie Chicken hidden underneath a stainless steel cloche, she answered my question with endearing eyes, and says that these were how she hold the plates before putting it down on the table, and that made me think of a thought.
+
+As I take this picture, I was showing how my grandmother carried these exact plates, but instead of a clear and translucent plates my grandmother once held when she was a kid, it’s now an amber like stained crystal plates held together in a stack by me, showing off that time truly is a reverie.`,
+    tags: ['heritage', 'family', 'heirloom', 'grandmother', 'memory', 'intergenerational'],
   },
 
   {

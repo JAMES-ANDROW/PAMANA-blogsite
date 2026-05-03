@@ -6,10 +6,35 @@ import { BlogPost } from '@/types'
 import { supabase } from '@/lib/supabase/client'
 import ScrollReveal from '@/components/ScrollReveal'
 import Link from 'next/link'
+import { useUser } from '@/hooks/useUser'
 
 type PostMetrics = {
   likes: number
   comments: number
+}
+
+const LIKED_POSTS_STORAGE_KEY = 'pamana-liked-posts'
+
+const getStoredLikes = (): Record<string, boolean> => {
+  if (typeof window === 'undefined') {
+    return {}
+  }
+
+  try {
+    const raw = window.localStorage.getItem(LIKED_POSTS_STORAGE_KEY)
+    if (!raw) {
+      return {}
+    }
+
+    const parsed = JSON.parse(raw)
+    if (parsed && typeof parsed === 'object') {
+      return parsed as Record<string, boolean>
+    }
+
+    return {}
+  } catch {
+    return {}
+  }
 }
 
 interface FeaturedStoriesProps {
@@ -17,6 +42,7 @@ interface FeaturedStoriesProps {
 }
 
 export default function FeaturedStories({ posts }: FeaturedStoriesProps) {
+  const { isAuthenticated } = useUser()
   const [metricsByPost, setMetricsByPost] = useState<Record<string, PostMetrics>>({})
   const [sortedPosts, setSortedPosts] = useState<BlogPost[]>(posts)
 
@@ -24,6 +50,8 @@ export default function FeaturedStories({ posts }: FeaturedStoriesProps) {
     let cancelled = false
 
     const fetchAndSortMetrics = async () => {
+      const storedLikes = getStoredLikes()
+
       const entries = await Promise.all(
         posts.map(async (post) => {
           const [likesResult, commentsResult] = await Promise.all([
@@ -38,11 +66,15 @@ export default function FeaturedStories({ posts }: FeaturedStoriesProps) {
               .eq('post_id', post.slug),
           ])
 
+          const localBoost = !isAuthenticated && storedLikes[post.slug] ? 1 : 0
+          const likes = (likesResult.count ?? post.likes) + localBoost
+          const comments = commentsResult.count ?? 0
+
           return [
             post.slug,
             {
-              likes: likesResult.count ?? post.likes,
-              comments: commentsResult.count ?? 0,
+              likes,
+              comments,
               post,
             },
           ] as const
@@ -55,13 +87,16 @@ export default function FeaturedStories({ posts }: FeaturedStoriesProps) {
         )
         setMetricsByPost(metricsMap)
 
-        // Sort by likes + comments (most engaged first)
+        // Sort by likes (highest first), then by most recent post date for ties.
         const sorted = [...posts].sort((a, b) => {
-          const aTotal =
-            (metricsMap[a.slug]?.likes ?? 0) + (metricsMap[a.slug]?.comments ?? 0)
-          const bTotal =
-            (metricsMap[b.slug]?.likes ?? 0) + (metricsMap[b.slug]?.comments ?? 0)
-          return bTotal - aTotal
+          const aLikes = metricsMap[a.slug]?.likes ?? 0
+          const bLikes = metricsMap[b.slug]?.likes ?? 0
+
+          if (bLikes !== aLikes) {
+            return bLikes - aLikes
+          }
+
+          return new Date(b.date).getTime() - new Date(a.date).getTime()
         })
 
         setSortedPosts(sorted.slice(0, 3))
@@ -70,10 +105,35 @@ export default function FeaturedStories({ posts }: FeaturedStoriesProps) {
 
     fetchAndSortMetrics()
 
+    const reactionsChannel = supabase
+      .channel('featured-likes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reactions',
+        },
+        () => {
+          fetchAndSortMetrics()
+        }
+      )
+      .subscribe()
+
+    const handleLocalLikeChanged = () => {
+      fetchAndSortMetrics()
+    }
+
+    window.addEventListener('pamana-like-changed', handleLocalLikeChanged)
+
     return () => {
       cancelled = true
+      window.removeEventListener('pamana-like-changed', handleLocalLikeChanged)
+      supabase.removeChannel(reactionsChannel)
     }
-  }, [posts])
+  }, [posts, isAuthenticated])
+
+  const topStorySlug = sortedPosts[0]?.slug
 
   return (
     <>
@@ -96,12 +156,23 @@ export default function FeaturedStories({ posts }: FeaturedStoriesProps) {
             distancePx={36}
             durationMs={900}
             blurPx={7}
+            className={post.slug === topStorySlug ? 'md:order-2 lg:order-2' : index === 1 ? 'md:order-1 lg:order-1' : 'md:order-3 lg:order-3'}
           >
-            <BlogCard
-              post={post}
-              likesCount={metricsByPost[post.slug]?.likes}
-              commentsCount={metricsByPost[post.slug]?.comments}
-            />
+            <div className={post.slug === topStorySlug ? 'relative lg:-translate-y-3' : 'relative'}>
+              {post.slug === topStorySlug && (
+                <span className="absolute -top-3 left-4 z-10 rounded-full bg-heritage-gold px-3 py-1 font-sans text-xs font-semibold uppercase tracking-wider text-heritage-dark-brown shadow-md">
+                  Most Liked
+                </span>
+              )}
+
+              <div className={post.slug === topStorySlug ? 'rounded-2xl ring-2 ring-heritage-gold/70 shadow-[0_18px_36px_rgba(107,68,35,0.2)]' : ''}>
+                <BlogCard
+                  post={post}
+                  likesCount={metricsByPost[post.slug]?.likes}
+                  commentsCount={metricsByPost[post.slug]?.comments}
+                />
+              </div>
+            </div>
           </ScrollReveal>
         ))}
       </div>

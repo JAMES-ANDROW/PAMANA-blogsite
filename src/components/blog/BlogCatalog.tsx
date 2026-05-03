@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from 'react'
 import BlogCard from '@/components/BlogCard'
 import { BlogPost } from '@/types'
 import { supabase } from '@/lib/supabase/client'
+import { useUser } from '@/hooks/useUser'
 
 type SortMetric = 'date' | 'likes' | 'comments'
 type SortDirection = 'asc' | 'desc'
@@ -13,11 +14,36 @@ type PostMetrics = {
   comments: number
 }
 
+const LIKED_POSTS_STORAGE_KEY = 'pamana-liked-posts'
+
+const getStoredLikes = (): Record<string, boolean> => {
+  if (typeof window === 'undefined') {
+    return {}
+  }
+
+  try {
+    const raw = window.localStorage.getItem(LIKED_POSTS_STORAGE_KEY)
+    if (!raw) {
+      return {}
+    }
+
+    const parsed = JSON.parse(raw)
+    if (parsed && typeof parsed === 'object') {
+      return parsed as Record<string, boolean>
+    }
+
+    return {}
+  } catch {
+    return {}
+  }
+}
+
 interface BlogCatalogProps {
   posts: BlogPost[]
 }
 
 export default function BlogCatalog({ posts }: BlogCatalogProps) {
+  const { isAuthenticated } = useUser()
   const [sortMetric, setSortMetric] = useState<SortMetric>('date')
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
   const [searchQuery, setSearchQuery] = useState('')
@@ -27,6 +53,8 @@ export default function BlogCatalog({ posts }: BlogCatalogProps) {
     let cancelled = false
 
     const fetchMetrics = async () => {
+      const storedLikes = getStoredLikes()
+
       const entries = await Promise.all(
         posts.map(async (post) => {
           const [likesResult, commentsResult] = await Promise.all([
@@ -41,10 +69,12 @@ export default function BlogCatalog({ posts }: BlogCatalogProps) {
               .eq('post_id', post.slug),
           ])
 
+          const localBoost = !isAuthenticated && storedLikes[post.slug] ? 1 : 0
+
           return [
             post.slug,
             {
-              likes: likesResult.count ?? post.likes,
+              likes: (likesResult.count ?? post.likes) + localBoost,
               comments: commentsResult.count ?? 0,
             },
           ] as const
@@ -58,10 +88,49 @@ export default function BlogCatalog({ posts }: BlogCatalogProps) {
 
     fetchMetrics()
 
+    const reactionsChannel = supabase
+      .channel('blog-catalog-reactions')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'reactions',
+        },
+        () => {
+          fetchMetrics()
+        }
+      )
+      .subscribe()
+
+    const commentsChannel = supabase
+      .channel('blog-catalog-comments')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'comments',
+        },
+        () => {
+          fetchMetrics()
+        }
+      )
+      .subscribe()
+
+    const handleLocalLikeChanged = () => {
+      fetchMetrics()
+    }
+
+    window.addEventListener('pamana-like-changed', handleLocalLikeChanged)
+
     return () => {
       cancelled = true
+      window.removeEventListener('pamana-like-changed', handleLocalLikeChanged)
+      supabase.removeChannel(reactionsChannel)
+      supabase.removeChannel(commentsChannel)
     }
-  }, [posts])
+  }, [posts, isAuthenticated])
 
   const filteredPosts = useMemo(() => {
     const normalizedQuery = searchQuery.trim().toLowerCase()

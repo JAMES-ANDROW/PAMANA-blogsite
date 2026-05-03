@@ -1,8 +1,6 @@
 import Link from 'next/link'
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear()
-
   return (
     <footer className="bg-heritage-dark-brown text-heritage-light-beige border-t border-heritage-gold mt-16">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -48,7 +46,7 @@ export default function Footer() {
 
         <div className="border-t border-heritage-gold pt-8 text-center">
           <p className="text-sm font-light">
-            © {currentYear} Pamana Stories. Created with care.
+            © 2026 Pamana Stories. Created with WordPress.org.
           </p>
         </div>
       </div>
