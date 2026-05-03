@@ -27,7 +27,7 @@ export default function AboutPage() {
           <p className="font-sans text-lg text-heritage-brown leading-relaxed font-light mb-4">
             Pamana is a digital storytelling platform dedicated to preserving cultural heritage
             through the intersection of photography and narrative writing. The word itself carries
-            the weight of tradition—it means "legacy" or "heritage" in many Southeast Asian
+            the weight of tradition—it means &quot;legacy&quot; or &quot;heritage&quot; in many Southeast Asian
             languages, making it a fitting name for a project centered on generational continuity.
           </p>
           <p className="font-sans text-lg text-heritage-brown leading-relaxed font-light">
@@ -88,7 +88,7 @@ export default function AboutPage() {
             We believe in the power of specificity. Rather than broad generalizations, we focus on
             particular stories—a specific market, a specific fishing village, a specific mountain
             home. In the particular, the universal becomes visible. When we honor the details of one
-            community's story, we honor all communities engaged in similar practices.
+            community&rsquo;s story, we honor all communities engaged in similar practices.
           </p>
         </section>
 
@@ -110,7 +110,7 @@ export default function AboutPage() {
           <p className="font-sans text-lg text-heritage-brown leading-relaxed font-light">
             There is intentional minimalism here. We strip away ornamental elements to let the
             stories—both image and text—shine. White space is generous. Images are given prominence.
-            This is a design approach that respects both the viewer's attention and the subject
+            This is a design approach that respects both the viewer&rsquo;s attention and the subject
             matter we are presenting.
           </p>
         </section>
