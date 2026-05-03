@@ -8,6 +8,9 @@ export const metadata: Metadata = {
   title: 'Pamana | Stories Through the Lens, Across Generations',
   description:
     'A storytelling platform showcasing cultural heritage, traditions, and meaningful places through original photography and narrative writing.',
+  icons: {
+    icon: '/images/wordpress-logo.png',
+  },
   keywords: [
     'travel',
     'cultural heritage',
