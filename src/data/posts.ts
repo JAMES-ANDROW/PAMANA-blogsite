@@ -146,35 +146,6 @@ At that point, I learned that pamana could not be measured or owned. Instead, it
     tags: ['family', 'memory', 'heritage', 'pamana', 'intergenerational', 'legacy'],
   },
   {
-    id: '5',
-    slug: 'the-sounds-of-silence-what-mightve-been',
-    title: 'The Sounds of Silence; What might\'ve been.',
-    excerpt:
-      'Law books and dust hold the fingerprints of generations—but sometimes our hands are meant to hold a different kind of legacy.',
-    date: '2026-04-26',
-    author: 'Joriel Agustina Marie Alvarez',
-    likes: 108,
-    category: 'personal',
-    featured_image: '/images/ALVAREZ.jpg',
-    images: [
-      {
-        src: '/images/ALVAREZ.jpg',
-        alt: 'Family attic with books and photographs',
-        caption: 'Inherited expectations bound in leather and worn-out spines',
-      },
-    ],
-    story: `Tucked away in the corners and quietest parts of our family home, there lies a special space full of dust, photographs and ink. To any stranger, our attic nook located on the 2nd floor is merely a collection of aging photo albums and an overcrowded collection of books, it's unfamiliar and meaningless. For years, these shelves were a silent syllabus of what once was.
-
-The Alvarez home will forever be synonymous with a specific kind of service—one rooted in the theological and legal traditions represented here. These shelves were a testament and visual archive of intellect, expectations, and faith. My family looked at these volumes and then at me, seeing a successor who would one day carry these heavy truths into a professional life.
-
-As I grew older, my hands didn't reach for the law books; they reached for the skies—it yearned for the breeze of the air, the journey, the curiosity and cold nights as well as the memories through my camera. I chose a different career path, trading the rigid structure of the courtroom or the fluid light-filled world of visual storytelling. It had always felt like I knew my path already—like it was already destined for me.
-
-At first, looking at this attic, it felt like looking at a pile of "what-ifs." I felt the phantom of books I didn't master. I never wanted to master an art that I never found interesting, as my heart and mind was set out to master a different book, one that gets me for who I am, like the lenses of my camera. I see fingerprints of those who came before me, ones that had already proven themselves. There is always a heavy, authoritative feeling on the books placed on the shelves, such as the Canon law and Soteriology, standing alongside well-thumbed Bibles, old and dusty photo albums as well as academic journals. These weren't just books; they are significant blueprints for a future my elders had meticulously left for me, as if they knew my calling.
-
-Through the lens, my perspective shifted—and the weight of my heritage—it represents a "Pamana": a legacy that spans generations, bound in leather and worn-out spines. There is a profound beauty in that kind of hope—the idea that wisdom can be passed down like a physical heirloom, ready to be picked up by the next set of hands who are in dire need of knowledge that I will forever be proud of.`,
-    tags: ['legacy', 'family', 'choice', 'pamana', 'photography', 'heritage', 'identity'],
-  },
-  {
     id: '6',
     slug: 'i-serve-you-a-plate-of-plates',
     title: 'I serve you a plate of...plates?',
