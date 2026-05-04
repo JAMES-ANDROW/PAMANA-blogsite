@@ -37,7 +37,7 @@ I packed my things to go home, the wind breathed through my skin like a hug from
 
 Perhaps life is not simply black and white. Maybe it's like the gradient hues of a sunset, bold, chaotic, almost a mess. Yet, with a slight change of perspective we come to see it as a "beautiful mess."
 
-In Tatay Pedro's understanding, life was never fair. Some people received diplomas; Tatay Pedro received <em>"fishnets,</em> tangled, worn, and uncertain. Still, he found purpose in serving his family and community.
+In Tatay Pedro's understanding, life was never fair. Some people received diplomas; Tatay Pedro received <em>fishnets,</em> tangled, worn, and uncertain. Still, he found purpose in serving his family and community.
 
 As he shared his legacy with me, I hope you, as readers, will also find perspective in the communal fishing practice of <em>"sinsoro."</em> Life is not meant to be carried alone. In the hands of a community that's woven with purpose, resilience, and the quiet grace of contentment, even the heaviest fishnets become lighter.`,
     tags: ['coast', 'fisherfolk', 'resilience', 'community', 'personal-journey'],
