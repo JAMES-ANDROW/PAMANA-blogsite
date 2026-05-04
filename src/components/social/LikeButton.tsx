@@ -9,6 +9,7 @@ type LikeButtonProps = {
 }
 
 const LIKED_POSTS_STORAGE_KEY = 'pamana-liked-posts'
+const ANONYMOUS_REACTOR_STORAGE_KEY = 'pamana-anonymous-reactor-id'
 
 const getStoredLikes = (): Record<string, boolean> => {
   if (typeof window === 'undefined') {
@@ -52,6 +53,25 @@ const clearStoredLike = (postId: string) => {
   window.localStorage.setItem(LIKED_POSTS_STORAGE_KEY, JSON.stringify(current))
 }
 
+const getOrCreateAnonymousReactorId = (): string => {
+  if (typeof window === 'undefined') {
+    return 'server-render'
+  }
+
+  const existing = window.localStorage.getItem(ANONYMOUS_REACTOR_STORAGE_KEY)
+  if (existing) {
+    return existing
+  }
+
+  const generated =
+    typeof window.crypto !== 'undefined' && typeof window.crypto.randomUUID === 'function'
+      ? window.crypto.randomUUID()
+      : `${Date.now()}-${Math.random().toString(16).slice(2)}`
+
+  window.localStorage.setItem(ANONYMOUS_REACTOR_STORAGE_KEY, generated)
+  return generated
+}
+
 const emitLikeChanged = (postId: string, liked: boolean) => {
   if (typeof window === 'undefined') {
     return
@@ -73,6 +93,7 @@ export default function LikeButton({ postId }: LikeButtonProps) {
   const fetchReactions = async () => {
     const storedLikes = getStoredLikes()
     const likedOnDevice = Boolean(storedLikes[postId])
+    const anonymousReactorId = getOrCreateAnonymousReactorId()
 
     const { count } = await supabase
       .from('reactions')
@@ -92,13 +113,34 @@ export default function LikeButton({ postId }: LikeButtonProps) {
         .limit(1)
 
       serverLikedByUser = Boolean(data && data.length > 0)
+    } else {
+      const { data } = await supabase
+        .from('reactions')
+        .select('id')
+        .eq('post_id', postId)
+        .eq('anonymous_id', anonymousReactorId)
+        .eq('type', 'like')
+        .limit(1)
+
+      serverLikedByUser = Boolean(data && data.length > 0)
+
+      if (likedOnDevice && !serverLikedByUser) {
+        const { error } = await supabase.from('reactions').insert({
+          post_id: postId,
+          anonymous_id: anonymousReactorId,
+          type: 'like',
+        })
+
+        if (!error || error.code === '23505') {
+          serverLikedByUser = true
+        }
+      }
     }
 
     const mergedLikedState = likedOnDevice || serverLikedByUser
-    const localLikeContribution = likedOnDevice && !serverLikedByUser ? 1 : 0
 
     setLikedByUser(mergedLikedState)
-    setLikesCount((count ?? 0) + localLikeContribution)
+    setLikesCount(count ?? 0)
   }
 
   useEffect(() => {
@@ -128,28 +170,39 @@ export default function LikeButton({ postId }: LikeButtonProps) {
     setIsUpdating(true)
 
     try {
-      if (isAuthenticated && user) {
-        if (optimisticLiked) {
-          const { error } = await supabase.from('reactions').insert({
-            post_id: postId,
-            user_id: user.id,
-            type: 'like',
-          })
+      const anonymousReactorId = getOrCreateAnonymousReactorId()
 
-          if (error && error.code !== '23505') {
-            throw error
-          }
-        } else {
-          const { error } = await supabase
-            .from('reactions')
-            .delete()
-            .eq('post_id', postId)
-            .eq('user_id', user.id)
-            .eq('type', 'like')
+      if (optimisticLiked) {
+        const reactionToInsert = isAuthenticated && user
+          ? {
+              post_id: postId,
+              user_id: user.id,
+              type: 'like',
+            }
+          : {
+              post_id: postId,
+              anonymous_id: anonymousReactorId,
+              type: 'like',
+            }
 
-          if (error) {
-            throw error
-          }
+        const { error } = await supabase.from('reactions').insert(reactionToInsert)
+
+        if (error && error.code !== '23505') {
+          throw error
+        }
+      } else {
+        const deleteQuery = supabase
+          .from('reactions')
+          .delete()
+          .eq('post_id', postId)
+          .eq('type', 'like')
+
+        const { error } = isAuthenticated && user
+          ? await deleteQuery.eq('user_id', user.id)
+          : await deleteQuery.eq('anonymous_id', anonymousReactorId)
+
+        if (error) {
+          throw error
         }
       }
     } catch (_error) {
@@ -185,7 +238,7 @@ export default function LikeButton({ postId }: LikeButtonProps) {
             ? 'border-heritage-gold bg-heritage-gold/15 text-heritage-dark-brown'
             : 'border-heritage-gold/50 bg-white text-heritage-brown hover:border-heritage-gold'
         } disabled:cursor-not-allowed disabled:opacity-60`}
-        title={likedByUser ? 'Click to remove your reaction on this device' : 'Click to react'}
+        title={likedByUser ? 'Click to remove your reaction' : 'Click to react'}
       >
         <span aria-hidden="true">{likedByUser ? '♥' : '♡'}</span>
         <span>{likesCount}</span>

@@ -24,11 +24,32 @@ create table if not exists public.comments (
 create table if not exists public.reactions (
   id uuid primary key default gen_random_uuid(),
   post_id text not null,
-  user_id uuid not null references auth.users(id) on delete cascade,
+  user_id uuid references auth.users(id) on delete cascade,
+  anonymous_id text,
   type text not null check (type in ('like')),
   created_at timestamptz not null default now(),
   unique (post_id, user_id, type)
 );
+
+alter table public.reactions
+  add column if not exists anonymous_id text;
+
+alter table public.reactions
+  alter column user_id drop not null;
+
+alter table public.reactions
+  drop constraint if exists reactions_actor_check;
+
+alter table public.reactions
+  add constraint reactions_actor_check
+  check (
+    (user_id is not null and anonymous_id is null)
+    or (user_id is null and anonymous_id is not null)
+  );
+
+create unique index if not exists reactions_unique_anonymous_actor
+  on public.reactions (post_id, anonymous_id, type)
+  where anonymous_id is not null;
 
 alter table public.profiles enable row level security;
 alter table public.comments enable row level security;
@@ -85,11 +106,23 @@ on public.reactions for insert
 to authenticated
 with check (auth.uid() = user_id);
 
+drop policy if exists "reactions_insert_anonymous" on public.reactions;
+create policy "reactions_insert_anonymous"
+on public.reactions for insert
+to anon
+with check (user_id is null and anonymous_id is not null and char_length(anonymous_id) >= 16);
+
 drop policy if exists "reactions_delete_own" on public.reactions;
 create policy "reactions_delete_own"
 on public.reactions for delete
 to authenticated
 using (auth.uid() = user_id);
+
+drop policy if exists "reactions_delete_anonymous" on public.reactions;
+create policy "reactions_delete_anonymous"
+on public.reactions for delete
+to anon
+using (user_id is null and anonymous_id is not null and char_length(anonymous_id) >= 16);
 
 -- Keep profile in sync automatically when a new auth user is created.
 create or replace function public.handle_new_user()
