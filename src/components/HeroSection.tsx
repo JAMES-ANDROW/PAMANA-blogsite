@@ -1,3 +1,7 @@
+"use client"
+
+import LikeButton from '@/components/social/LikeButton'
+
 interface HeroSectionProps {
   title: string
   subtitle: string
@@ -26,6 +30,16 @@ export default function HeroSection({
         <p className="font-sans text-base sm:text-lg text-heritage-brown leading-relaxed max-w-2xl mx-auto font-light">
           {description}
         </p>
+
+        {/* Like this page button */}
+        <div className="h-3" />
+        <div className="mt-6 flex justify-center">
+          <LikeButton
+            postId="homepage"
+            className="px-8 py-3 text-base gap-3 font-semibold"
+            label="Like our Website"
+          />
+        </div>
       </div>
     </section>
   )

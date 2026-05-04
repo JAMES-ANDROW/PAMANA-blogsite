@@ -6,6 +6,8 @@ import { supabase } from '@/lib/supabase/client'
 
 type LikeButtonProps = {
   postId: string
+  className?: string
+  label?: string
 }
 
 const LIKED_POSTS_STORAGE_KEY = 'pamana-liked-posts'
@@ -84,7 +86,7 @@ const emitLikeChanged = (postId: string, liked: boolean) => {
   )
 }
 
-export default function LikeButton({ postId }: LikeButtonProps) {
+export default function LikeButton({ postId, className, label }: LikeButtonProps) {
   const { user, isAuthenticated, loading: authLoading } = useUser()
   const [likesCount, setLikesCount] = useState(0)
   const [likedByUser, setLikedByUser] = useState(false)
@@ -233,7 +235,7 @@ export default function LikeButton({ postId }: LikeButtonProps) {
         type="button"
         onClick={handleLikeClick}
         disabled={isUpdating || authLoading}
-        className={`inline-flex items-center gap-2 rounded-full border px-4 py-2 font-sans text-sm font-semibold transition-all ${
+        className={`${className ? className + ' ' : ''}inline-flex items-center gap-2 rounded-full border px-4 py-2 font-sans text-sm font-semibold transition-all ${
           likedByUser
             ? 'border-heritage-gold bg-heritage-gold/15 text-heritage-dark-brown'
             : 'border-heritage-gold/50 bg-white text-heritage-brown hover:border-heritage-gold'
@@ -242,7 +244,7 @@ export default function LikeButton({ postId }: LikeButtonProps) {
       >
         <span aria-hidden="true">{likedByUser ? '♥' : '♡'}</span>
         <span>{likesCount}</span>
-        <span>{likesCount === 1 ? 'Like' : 'Likes'}</span>
+        <span>{label ? label : likesCount === 1 ? 'Like' : 'Likes'}</span>
       </button>
     </>
   )

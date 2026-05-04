@@ -44,7 +44,7 @@ interface BlogCatalogProps {
 
 export default function BlogCatalog({ posts }: BlogCatalogProps) {
   const { isAuthenticated } = useUser()
-  const [sortMetric, setSortMetric] = useState<SortMetric>('date')
+  const [sortMetric, setSortMetric] = useState<SortMetric>('likes')
   const [sortDirection, setSortDirection] = useState<SortDirection>('desc')
   const [searchQuery, setSearchQuery] = useState('')
   const [metricsByPost, setMetricsByPost] = useState<Record<string, PostMetrics>>({})
@@ -217,8 +217,8 @@ export default function BlogCatalog({ posts }: BlogCatalogProps) {
           <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
             <div className="flex flex-wrap items-center gap-2">
             {[
-              { value: 'date' as const, label: 'Date' },
               { value: 'likes' as const, label: 'Likes' },
+              { value: 'date' as const, label: 'Date' },
               { value: 'comments' as const, label: 'Comments' },
             ].map((button) => (
               <button

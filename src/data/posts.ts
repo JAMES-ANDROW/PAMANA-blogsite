@@ -6,7 +6,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'when-life-gives-you-fishnets',
     title: 'When Life Gives You Fishnets',
     excerpt:
-      'In San Jose de Buenavista, the heart of Antique, my home, and a home for all that comes.',
+      'A community fishing practice taught perspective and resilience.',
     date: '2026-04-27',
     author: 'Therese Callasandra A. Baladiang',
     likes: 184,
@@ -19,9 +19,7 @@ export const blogPosts: BlogPost[] = [
         caption: 'Fishing life in San Jose de Buenavista',
       },
     ],
-    story: `In San Jose de Buenavista, the heart of Antique, my home, and a home for all that comes.
-
-Today, I asked my father, "Pa, mapa baybay anay ko, luya lawas Calcal." I went to the sea in search of perspective, inspiration, and a glimmer. With my camera slung over my shoulder, I made my way to the shore, silently hoping the sea would remind me that life is alright.
+    story: `Today, I asked my father, "Pa, mapa baybay anay ko, luya lawas Calcal." I went to the sea in search of perspective, inspiration, and a glimmer. With my camera slung over my shoulder, I made my way to the shore, silently hoping the sea would remind me that life is alright.
 
 As I made my way to my secret spot, I noticed a crowd gathered by the beach. People stood patiently, witnessing fishermen and the community pulling fishnets with purpose. Hoping for <em>"bastante nga dawi,"</em> tubs and tubs of fish to feed their families. There were waves crashing, a rhythm in the waiting, and a kind of silence that spoke louder than words. I stopped. The photojournalist in me awoke. This wasn't just a scene to capture; it was a story waiting to be heard.
 
