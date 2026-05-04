@@ -129,9 +129,8 @@ export default async function BlogPostPage({ params }: PageProps) {
             <p
               key={index}
               className="font-sans text-heritage-brown text-lg leading-relaxed mb-6 font-light"
-            >
-              {paragraph}
-            </p>
+              dangerouslySetInnerHTML={{ __html: paragraph }}
+            />
           ))}
         </div>
 
