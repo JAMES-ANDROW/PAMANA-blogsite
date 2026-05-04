@@ -6,7 +6,7 @@ export const blogPosts: BlogPost[] = [
     slug: 'when-life-gives-you-fishnets',
     title: 'When Life Gives You Fishnets',
     excerpt:
-      'A community fishing practice taught perspective and resilience.',
+      'In San Jose de Buenavista, the heart of Antique, my home, and a home for all that comes.',
     date: '2026-04-27',
     author: 'Therese Callasandra A. Baladiang',
     likes: 184,
